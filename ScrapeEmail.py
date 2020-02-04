@@ -9,11 +9,11 @@ from ScrapeImg import scrapeimg
 
 
 m = imaplib.IMAP4_SSL('imap.outlook.com',993)
-m.login('chenuratikah@teras.uemnet.com', 'cnat_trs01')
+m.login('youremail@outlook.com', 'yourpassword')
 
 m.select('Inbox')
 
-resp, items = m.search(None, 'FROM', '"chenuratikah@outlook.com"')
+resp, items = m.search(None, 'FROM', '"sender_email@outlook.com"')
 items = items[0].split()
 #print(items)
 
@@ -63,19 +63,19 @@ for emailid in items:
         if content is not None:
             delay = content.findAll(name= 'b')[0].text
             delay = int(str(delay).replace(' minit',''))
-            print("Kelewatan tambahan: "+ str(delay))
+            
 
             distance = content.findAll(name='b')[1].text
             distance = float(str(distance).replace(' km',''))
-            print("Jarak kesesakan: " + str(distance))
+            
 
             speed = content.findAll(name='b')[2].text
             speed = float(str(speed).replace(' km/j',''))
-            print("Halalaju semasa: " + str(speed))
+            
 
             traffic = content.findAll(name='b')[3].text
             traffic = int(str(traffic).replace('% perlahan dari biasa',''))/100
-            print("Trafik: " + str(traffic))
+           
 
         #To ways to construct image Url:
         #1) Construct manually from tag attributes
@@ -94,6 +94,7 @@ for emailid in items:
             #url = 'http://livemap-image.waze.com/'+ imgList[4].replace('"','')
 
             #print(url)
+            #Scrape image here:
             scrapeimg(url).getImage()
 
             
@@ -103,7 +104,7 @@ for emailid in items:
     #print(struct)
 
     #insert struct into MongoDB
-    coll = client['parent']
+    coll = client['yourCollectionName']
     coll.insert_one(result)
 
 
